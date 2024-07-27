@@ -1,0 +1,9 @@
+﻿## Interface: 60100
+## Title: HDH_AuraTracking_Totem
+## Author: hdh
+## Notes: AuraTracking plugin - for Totem, Mushroom, Summon, Rune etc..
+## Version: 6.1.2
+## Dependencies: HDH_AuraTracking
+
+TotemTracking.lua
+TotemOption.xml

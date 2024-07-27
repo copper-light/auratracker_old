@@ -1,0 +1,1277 @@
+﻿<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
+	<Script file="Option.lua"/>
+
+	
+	<Font name="FontTemplateL" font="Fonts\2002.TTF" virtual="true">
+		<FontHeight>
+		  <AbsValue val="20"/>
+		</FontHeight>
+	</Font>
+	
+	<Font name="FontTemplateM" font="Fonts\2002.TTF" virtual="true">
+		<Color r="1" g="0.8" b="0"/>
+		<FontHeight>
+		  <AbsValue val="15"/>
+		</FontHeight>
+	</Font>
+	
+	
+	<Frame name="DialogFrameTemplate" inherits="OptionFrameTemplate" hidden = "true" parent = "OptionFrame" frameStrata="DIALOG" virtual="true">
+		<Size><AbsDimension x="300" y="100"/></Size>
+		<Anchors>
+			<Anchor point="CENTER" relativeTo="UIParent">
+			<Offset><AbsDimension x="0" y="100"/></Offset>
+			</Anchor>
+		</Anchors>
+		<Layers>
+			<Layer level="ARTWORK">
+				<FontString name ="$parentText" inherits="FontTemplateM" text="">
+					<Anchors>
+						<Anchor point="CENTER" x="0" y="10"/>
+					</Anchors>
+				</FontString>
+				
+				<Texture file="Interface\CURSOR\Quest">
+					<Size><AbsDimension x="15" y="30" /></Size>
+					<Anchors>
+						<Anchor point="RIGHT" relativeTo="$parentText" relativePoint="LEFT" x="-10" y="0"/>
+					</Anchors>
+					<TexCoords left="0.3" right="0.8" bottom="1.0" top="0" />
+				</Texture>
+			</Layer>
+		</Layers>
+		<Frames>
+			<Button name="$parentButtonOK" inherits="OptionsButtonTemplate" text="예">
+				<Anchors>
+					<Anchor point="RIGHT" relativeTo="$parent" relativePoint="CENTER">
+					<Offset><AbsDimension x="-10" y="-25"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick> self:GetParent():Hide(); self:GetParent().func(self:GetParent().arg); </OnClick>
+				</Scripts>
+			</Button>
+			
+			<Button name="$parentButtonClose" inherits="OptionsButtonTemplate" text="아니오">
+				<Anchors>
+					<Anchor point="LEFT" relativeTo="$parent" relativePoint="CENTER">
+					<Offset><AbsDimension x="10" y="-25"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick> self:GetParent():Hide()</OnClick>
+				</Scripts>
+			</Button>			
+		</Frames>
+		<Scripts>
+			<OnLoad>tinsert(UISpecialFrames, self:GetName());</OnLoad>
+			<OnShow>_G[self:GetName().."Text"]:SetText(self.text);</OnShow>
+		</Scripts>
+	</Frame>
+	
+	<Frame name="OptionFrameTemplate" virtual="true">
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture>
+					<Color r="0" g="0" b= "0" a="0.6"/>
+					<Anchors>
+						<Anchor point="TOPLEFT" x="0" y="0"/>
+						<Anchor point="BOTTOMRIGHT" x="0" y="0"/>
+					</Anchors>
+				</Texture>
+			</Layer>
+			<Layer level="BORDER">
+				<Texture parentKey="TopLeftCorner" inherits="Talent-Inner-TopLeft">
+					<Anchors>
+						<Anchor point="TOPLEFT" x="0" y="0"/>
+					</Anchors>
+				</Texture>
+				<Texture parentKey="TopRightCorner" inherits="Talent-Inner-TopRight">
+					<Anchors>
+						<Anchor point="TOPRIGHT" x="0" y="0"/>
+					</Anchors>
+				</Texture>
+				<Texture parentKey="BotLeftCorner" inherits="Talent-Inner-BotLeft">
+					<Anchors>
+						<Anchor point="BOTTOMLEFT" x="0" y="0"/>
+					</Anchors>
+				</Texture>
+				<Texture parentKey="BotRightCorner" inherits="Talent-Inner-BotRight">
+					<Anchors>
+						<Anchor point="BOTTOMRIGHT" x="0" y="0"/>
+					</Anchors>
+				</Texture>
+				<Texture parentKey="TopBorder" inherits="_Talent-Inner-TopTile">
+					<Anchors>
+						<Anchor point="TOPLEFT" relativeKey="$parent.TopLeftCorner" relativePoint="TOPRIGHT" x="0" y="0"/>
+						<Anchor point="TOPRIGHT" relativeKey="$parent.TopRightCorner" relativePoint="TOPLEFT" x="0" y="0"/>
+					</Anchors>
+				</Texture>
+				<Texture parentKey="BottomBorder" inherits="_Talent-Inner-BotTile">
+					<Anchors>
+						<Anchor point="BOTTOMLEFT" relativeKey="$parent.BotLeftCorner" relativePoint="BOTTOMRIGHT" x="0" y="0"/>
+						<Anchor point="BOTTOMRIGHT" relativeKey="$parent.BotRightCorner" relativePoint="BOTTOMLEFT" x="0" y="0"/>
+					</Anchors>
+				</Texture>
+				<Texture parentKey="LeftBorder" inherits="!Talent-Inner-LeftTile">
+					<Anchors>
+						<Anchor point="TOPLEFT" relativeKey="$parent.TopLeftCorner" relativePoint="BOTTOMLEFT" x="0" y="0"/>
+						<Anchor point="BOTTOMLEFT" relativeKey="$parent.BotLeftCorner" relativePoint="TOPLEFT" x="0" y="0"/>
+					</Anchors>
+				</Texture>
+				<Texture parentKey="RightBorder" inherits="!Talent-Inner-RightTile">
+					<Anchors>
+						<Anchor point="TOPRIGHT" relativeKey="$parent.TopRightCorner" relativePoint="BOTTOMRIGHT" x="0" y="0"/>
+						<Anchor point="BOTTOMRIGHT" relativeKey="$parent.BotRightCorner" relativePoint="TOPRIGHT" x="0" y="0"/>
+					</Anchors>
+				</Texture>	
+			</Layer>
+			<Layer level="ARTWORK">
+				<Texture name="TalentIcon" hidden="true">
+					<Size><AbsDimension x="33" y="33" /></Size>
+					<Anchors>
+						<Anchor point="TOPLEFT" x="20" y="-15"/>
+					</Anchors>
+				</Texture>
+				<FontString name ="TalentText" inherits="FontTemplateL" justifyH="RIGHT">
+					<Size><AbsDimension x="200" y="50" /></Size>
+					<Anchors>
+						<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" x="-20" y="-10"/>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+	</Frame>
+	
+	<CheckButton name="HDHSpecTabTemplate" virtual="true" hidden="false">
+		<Size x="32" y="32"/>
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture name="$parentBackground" urgency="5" file="Interface\SpellBook\SpellBook-SkillLineTab">
+					<Size x="64" y="64"/>
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset x="-3" y="11"/>
+						</Anchor>
+					</Anchors>
+				</Texture>
+			</Layer>
+		</Layers>
+		<NormalTexture/>
+		<HighlightTexture file="Interface\Buttons\ButtonHilight-Square" alphaMode="ADD"/>
+		<CheckedTexture urgency="5" file="Interface\Buttons\CheckButtonHilight" alphaMode="ADD"/>
+	</CheckButton>
+
+	<Button name="RowTemplate" virtual="true">
+		<Frames>
+			<Button name="$parentButtonDown">
+				<Size>
+					<AbsDimension x="26" y="26"/>
+				</Size>
+				<Anchors>
+					<Anchor point="RIGHT" relativeTo="$parent" relativePoint="RIGHT">
+						<Offset><AbsDimension x="0" y="0"/></Offset>
+					</Anchor>
+					
+				</Anchors>
+				<NormalTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Up"/>
+				<PushedTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollDown-Down"/>
+				<HighlightTexture alphaMode="ADD" file="Interface\BUTTONS\UI-CheckBox-Highlight"/>
+				<Scripts>
+					<OnClick>HDH_OnClickBtnDown(self,self:GetParent():GetAttribute("no"))</OnClick>
+				</Scripts>
+			</Button>
+			
+			<Button name="$parentButtonUp" >
+				<Size>
+					<AbsDimension x="26" y="26"/>
+				</Size>
+				<Anchors>
+					<Anchor point="RIGHT" relativePoint="LEFT" relativeTo="$parentButtonDown">
+						<Offset><AbsDimension x="0" y="0"/></Offset>
+					</Anchor>
+				</Anchors>
+				<NormalTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollUp-Up"/>
+				<PushedTexture file="Interface\ChatFrame\UI-ChatIcon-ScrollUp-Down"/>
+				<HighlightTexture alphaMode="ADD" file="Interface\BUTTONS\UI-CheckBox-Highlight"/>
+				<Scripts>
+					<OnClick>HDH_OnClickBtnUp(self,self:GetParent():GetAttribute("no"))</OnClick>
+				</Scripts>
+			</Button>
+		
+			<CheckButton name="$parentCheckButtonFix" inherits="OptionsCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="RIGHT" relativeTo="$parentButtonUp" relativePoint="LEFT">
+					<Offset><AbsDimension x="-30" y="0"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad> getglobal(self:GetName().."Text"):SetText("항상")</OnLoad>
+					<OnClick> HDH_OnFix(self:GetParent():GetParent():GetAttribute("unit"),self:GetParent():GetAttribute("no"),self:GetChecked())</OnClick>
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						GameTooltip:AddLine("해당 주문을 항상 표시 합니다\n|cffffffff(항상 표시 옵션이 OFF 일 경우, 오라가 활성화 되었을 때만 표시합니다)");
+						GameTooltip:Show();
+					</OnEnter>
+					<OnLeave>
+						GameTooltip_Hide();
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
+		
+			<Button name="$parentButtonAddAndDel" inherits="OptionsButtonTemplate" text="Add">
+				<Size>
+					<AbsDimension x="50" y="26"/>
+				</Size>
+				<Anchors>
+					<Anchor point="RIGHT" relativePoint="LEFT" relativeTo="$parentCheckButtonFix">
+						<Offset><AbsDimension x="0" y="0"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>HDH_OnClickBtnAddAndDel(self,self:GetParent():GetAttribute("no"))</OnClick>
+				</Scripts>
+			</Button>
+			
+			<EditBox name="$parentEditBoxID" inherits="InputBoxTemplate" enableMouse="true" autoFocus="false">
+				<Size>
+					<AbsDimension x="65" y="26"/>
+				</Size>
+				<Anchors>
+					<Anchor point="RIGHT" relativePoint="LEFT" relativeTo="$parentButtonAddAndDel">
+						<Offset>
+							<AbsDimension x="0" y="0"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnEnterPressed>HDH_OnEnterPressed(self)</OnEnterPressed>
+					<OnEscapePressed>HDH_OnEditEscape(self)</OnEscapePressed>
+					<OnEditFocusGained>HDH_OnEditFocusGained(self) </OnEditFocusGained>
+					<OnEditFocusLost>HDH_OnEditFocusLost(self) </OnEditFocusLost>
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_TOPLEFT");
+						GameTooltip:AddLine("주문 이름 또는 ID 를 입력합니다\n|cffffffff주의 : 스킬 ID 와 실제 적용되는 버프/디버프의 ID 가 다를 수 있습니다\n제대로 동작하지 않는다면 반드시 주문 ID 를 확인하고 |cffff0000주문ID 로 입력|cffffffff해주세요.\n쿨다운 추적이라면 |cffff0000스킬(아이템)의 이름 또는 ID를 입력|cffffffff해주세요");
+						GameTooltip:Show();
+					</OnEnter>
+					<OnLeave>
+						GameTooltip_Hide();
+					</OnLeave>
+				</Scripts>
+			</EditBox>
+		</Frames>
+		<Layers>
+			<Layer level="ARTWORK">
+				<FontString name="$parentTextNum" inherits="GameFontNormal">
+					<Size>
+						<AbsDimension x="20" y="25"/>
+					</Size>
+					<Color r="1" g="1" b="1"/>
+					<Anchors>
+						<Anchor point="LEFT" relativeTo="$parent" relativePoint="LEFT">
+							<Offset><AbsDimension x="0" y="0"/></Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<Texture name="$parentTexture">
+					<Size>
+						<AbsDimension x='22' y='22'/>
+					</Size>
+					<Anchors>
+						<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$parentTextNum">
+							<Offset><AbsDimension x="5" y="0"/></Offset>
+						</Anchor>
+					</Anchors>
+				</Texture>
+				<FontString name="$parentTextName" inherits="GameFontNormal" justifyH="LEFT">
+					<Size>
+						<AbsDimension x="180" y="25"/>
+					</Size>
+					<Color r="1" g="1" b="1"/>
+					<Anchors>
+						<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$parentTexture">
+							<Offset><AbsDimension x="5" y="0"/></Offset>
+						</Anchor>
+						<Anchor point="RIGHT" relativePoint="LEFT" relativeTo="$parentEditBoxID">
+							<Offset><AbsDimension x="-10" y="0"/></Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+			</Layer>
+			<Layer level="BACKGROUND">
+				<Texture name="$parentBG">
+					<Color r="1" g="1" b="1" a="0.1" />
+					<Size>
+						<AbsDimension x="0" y="2"/>
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT" relativePoint="TOPLEFT" relativeTo="$parent">
+							<Offset><AbsDimension x="-10" y="1"/></Offset>
+						</Anchor>
+						<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeTo="$parent">
+							<Offset><AbsDimension x="0" y="0"/></Offset>
+						</Anchor>
+					</Anchors>
+				</Texture>
+			</Layer>
+		</Layers>
+		<Scripts>
+			<OnLoad>
+				_G[self:GetName().."Texture"]:SetTexCoord(0.08,0.92,0.08,0.92)
+			</OnLoad>
+		</Scripts>
+		<HighlightTexture alphaMode="ADD" file="Interface\PaperDollInfoFrame\UI-Character-Tab-Highlight"/>
+	</Button>
+	
+	<Frame name="EditRowTemplate" virtual="true">
+		<Layers>
+			<Layer level="Artwork">
+				<FontString name="$parentText" inherits="GameFontNormal" justifyH ="LEFT">
+					<Size><AbsDimension x="100" y="25"/></Size>
+					<Anchors>
+						<Anchor point="TOPLEFT" relativePoint="TOPLEFT" relativeTo="$parent">
+							<Offset><AbsDimension x="20" y="-10"/></Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<EditBox name="$parentEditBox" inherits="InputBoxTemplate" enableMouse="true" autoFocus="false">
+			<Size>
+				<AbsDimension x="50" y="26"/>
+			</Size>
+			<Anchors>
+				<Anchor point="LEFT" relativePoint="LEFT" relativeTo="$parentButtonUp">
+					<Offset>
+						<AbsDimension x="0" y="0"/>
+					</Offset>
+				</Anchor>
+			</Anchors>
+			<Scripts>
+				<OnEnterPressed>HDH_OnEnterPressed(self)</OnEnterPressed>
+				<OnEscapePressed>self:ClearFocus()</OnEscapePressed>
+			</Scripts>
+		</EditBox>
+		<Button name="$parentButton" inherits="OptionsButtonTemplate" text="ok">
+			<Size>
+				<AbsDimension x="100" y="26"/>
+			</Size>
+			<Anchors>
+				<Anchor point="RIGHT" relativePoint="RIGHT" relativeTo="$parent">
+					<Offset><AbsDimension x="0" y="0"/></Offset>
+				</Anchor>
+			</Anchors>
+			<Scripts>
+				<OnClick></OnClick>
+			</Scripts>
+		</Button>	
+	</Frame>
+	
+	<Frame name="UnitOptionTemplate" virtual="true">
+		<Layers>
+			<Layer level="Artwork">
+				<FontString name="$parentTextTitle" inherits="FontTemplateL" justifyH ="LEFT"  text="Aura List" hidden="false" wordWrap="true">
+					<Size><AbsDimension x="130" y="26"/></Size>
+					<Anchors>
+						<Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" relativeTo="$parent">
+							<Offset><AbsDimension x="5" y="0"/></Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="$parentTextTitle2" inherits="FontTemplateM" justifyH ="LEFT"  text="" hidden="false">
+					<Size><AbsDimension x="130" y="26"/></Size>
+					<Anchors>
+						<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$parentTextTitle">
+							<Offset><AbsDimension x="0" y="0"/></Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="$parentText1" inherits="GameFontNormal" justifyH ="LEFT" text="No">
+					<Size><AbsDimension x="20" y="25"/></Size>
+					<Anchors>
+						<Anchor point="TOPLEFT" relativePoint="TOPLEFT" relativeTo="$parent">
+							<Offset><AbsDimension x="20" y="-10"/></Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString  name="$parentText2" inherits="GameFontNormal" justifyH ="LEFT" text="Spell Name">
+					<Size><AbsDimension x="100" y="25"/></Size>
+					<Anchors>
+						<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$parentText1">
+							<Offset><AbsDimension x="40" y="0"/></Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="$parentText3" inherits="GameFontNormal" justifyH ="LEFT" text="Spell ID">
+					<Size><AbsDimension x="100" y="25"/></Size>
+					<Anchors>
+						<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$parentText2">
+							<Offset><AbsDimension x="25" y="0"/></Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+			<TileSize><AbsValue val="20"/></TileSize>
+			<EdgeSize><AbsValue val="20"/></EdgeSize>
+		</Backdrop>
+		<Frames>
+			<ScrollFrame name="$parentSF" inherits="UIPanelScrollFrameTemplate">
+				<Layers>
+					<Layer level="BACKGROUND">
+						<Texture>
+							<Size><AbsDimension x="0" y="0"/></Size>
+							<Color r="0" g="0" b="0" a="0.2"/>
+							<Anchors>
+								<Anchor point="TOPLEFT" relativeTo="$parentScrollBar" relativePoint="TOPLEFT">
+									<Offset><AbsDimension x="0" y="0"/></Offset>
+								</Anchor>
+								<Anchor point="BOTTOMRIGHT"  relativeTo="$parentScrollBar" relativePoint="BOTTOMRIGHT">
+									<Offset><AbsDimension x="0" y="0"/></Offset>
+								</Anchor>
+							</Anchors>
+						</Texture>
+					</Layer>
+				</Layers>
+				
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="$parentText1" relativePoint="BOTTOMLEFT">
+						<Offset><AbsDimension x="0" y="0"/></Offset>
+					</Anchor>
+					<Anchor point="BOTTOMRIGHT"  relativeTo="$parent" relativePoint="BOTTOMRIGHT">
+						<Offset><AbsDimension x="-35" y="70"/></Offset>
+					</Anchor>
+				</Anchors>
+				
+				<ScrollChild>
+					<Frame name="$parentContants">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="$parentText1" relativePoint="BOTTOMLEFT">
+								<Offset><AbsDimension x="0" y="0"/></Offset>
+							</Anchor>
+							<Anchor point="BOTTOMRIGHT"  relativeTo="$parent" relativePoint="BOTTOMRIGHT">
+								<Offset><AbsDimension x="0" y="0"/></Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnShow>self:SetAttribute("unit",self:GetParent():GetParent():GetAttribute("unit"))</OnShow>
+							
+						</Scripts>
+					</Frame>
+				</ScrollChild>
+			</ScrollFrame>
+		</Frames>
+		
+		<Scripts>
+			<OnLoad></OnLoad>
+		</Scripts>
+	</Frame>
+	
+	<Slider name="AT_SliderTemplate" inherits="OptionsSliderTemplate" virtual ="true" >
+		<Layers> 
+			<Layer level="Artwork">
+				<FontString name="$parentTextValue" inherits="GameFontNormal" justifyH="CENTER">
+					<Anchors>
+						<Anchor point="TOP" relativeTo="$parent" relativePoint="TOP">
+							<Offset><AbsDimension x='0' y='-15' /></Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+	</Slider>
+	
+	<Button name="ColorPickerTemplate" virtual="true">
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture name="$parentOff">
+					<Color r="0.6" g="0.6" b="0.6" />
+					<Size><AbsDimension x="18" y="18"/></Size>
+					<Anchors>
+						<Anchor point="LEFT">
+						<Offset><AbsDimension x="0" y="0"/></Offset>
+						</Anchor>
+					</Anchors>
+				</Texture>
+			</Layer>
+			<Layer level="BACKGROUND">
+				<Texture name="$parentOn" hidden="true">
+					<Color r="0.7" g="0.7" b="0" />
+					<Size><AbsDimension x="18" y="18"/></Size>
+					<Anchors>
+						<Anchor point="LEFT">
+						<Offset><AbsDimension x="0" y="0"/></Offset>
+						</Anchor>
+					</Anchors>
+				</Texture>
+			</Layer>
+			
+			<Layer level="ARTWORK">
+				<FontString name="$parentText" inherits="GameFontNormal" text="text" justifyH="LEFT">
+					<Size><AbsDimension x="120" y="26"/></Size>
+					<Anchors>
+						<Anchor point="LEFT">
+						<Offset><AbsDimension x="24" y="0"/></Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+				
+				<Texture name="$parentColor">
+					<Color r="0" g="0" b="0" />
+					<Size><AbsDimension x="16" y="16"/></Size>
+					<Anchors>
+						<Anchor point="CENTER" relativeTo="$parentOff">
+						<Offset><AbsDimension x="0" y="0"/></Offset>
+						</Anchor>
+					</Anchors>
+				</Texture>
+			</Layer>
+		</Layers>
+		<Scripts>
+			<OnEnter>_G[self:GetName().."On"]:Show()</OnEnter>
+			<OnLeave>_G[self:GetName().."On"]:Hide()</OnLeave>
+		</Scripts>
+	</Button>
+	
+	<Frame name="OptionFrame" movable="true" toplevel="true" parent="UIParent" frameStrata="HIGH" hidden="true" enableMouse="true" inherits="OptionFrameTemplate">
+		<Size><AbsDimension x="500" y="520"/></Size>
+		<Anchors>
+			<Anchor point="CENTER">
+				<Offset><AbsDimension x="0" y="0"/></Offset>
+			</Anchor>
+		</Anchors>
+		
+		<Frames>
+			<CheckButton name="BtnTalent1" inherits="HDHSpecTabTemplate" id ="1">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativePoint="TOPRIGHT">
+						<Offset><AbsDimension x="0" y="-15"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad></OnLoad>
+					<OnClick>HDH_ChangeTalentTab(self,self:GetID())</OnClick>
+				</Scripts>
+			</CheckButton>
+			
+			<CheckButton name="BtnTalent2" inherits="HDHSpecTabTemplate" id ="2">
+				<Anchors>
+					<Anchor point="TOP" relativeTo="BtnTalent1" relativePoint="BOTTOM">
+						<Offset><AbsDimension x="0" y="-20"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad></OnLoad>
+					<OnClick>HDH_ChangeTalentTab(self,self:GetID())</OnClick>
+				</Scripts>
+			</CheckButton>
+			
+			<CheckButton name="BtnTalent3" inherits="HDHSpecTabTemplate" id ="3">
+				<Anchors>
+					<Anchor point="TOP" relativeTo="BtnTalent2" relativePoint="BOTTOM">
+						<Offset><AbsDimension x="0" y="-20"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad></OnLoad>
+					<OnClick>HDH_ChangeTalentTab(self,self:GetID())</OnClick>
+				</Scripts>
+			</CheckButton>
+			
+			<CheckButton name="BtnTalent4" inherits="HDHSpecTabTemplate" id ="4">
+				<Anchors>
+					<Anchor point="TOP" relativeTo="BtnTalent3" relativePoint="BOTTOM">
+						<Offset><AbsDimension x="0" y="-20"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad></OnLoad>
+					<OnClick>HDH_ChangeTalentTab(self,self:GetID())</OnClick>
+				</Scripts>
+			</CheckButton>
+		
+			<Frame name="TitleFrame" enableMouse="true">
+				<Size><AbsDimension x="400" y="30"/></Size>
+				<Anchors>
+					<Anchor point="TOP">
+					<Offset><AbsDimension x="0" y="13"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer level="ARTWORK">
+						<Texture file="Interface\DialogFrame\UI-DialogBox-Header">
+							<Size><AbsDimension x="400" y="64"/></Size>
+							<Anchors>
+								<Anchor point="TOP">
+								<Offset><AbsDimension x="0" y="0"/></Offset>
+								</Anchor>
+							</Anchors>
+						</Texture>
+					</Layer>
+					<Layer level="OVERLAY">
+						<FontString inherits="GameFontNormal" text="AuraTracking Config">
+							<Anchors>
+								<Anchor point="TOP">
+								<Offset><AbsDimension x="0" y="-13"/></Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+				<Scripts>				
+					<OnMouseDown>self:GetParent():StartMoving()</OnMouseDown>
+					<OnMouseUp>self:GetParent():StopMovingOrSizing()</OnMouseUp>
+				</Scripts>
+			</Frame>
+			
+			<Frame name="TalentListFrame" hidden="true">
+				<Size><AbsDimension x="500" y ="30" /></Size>
+				<Anchors>
+					<Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="10" y="-50" /></Offset>
+					</Anchor>
+				</Anchors>
+				<Frames>
+					<Button name="$parentTalentButton1" inherits="OptionsButtonTemplate" text="talent1" id='1'>
+						<Anchors>
+							<Anchor point="LEFT" relativePoint="LEFT" relativeTo="$parent">
+							<Offset><AbsDimension x="12" y="0"/></Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnClick>HDH_ChangeTalentFrame(self, self:GetID())</OnClick>
+							<OnMouseUp>HDH_ChangeTalentFrame(self, self:GetID())</OnMouseUp>
+						</Scripts>
+					</Button>
+					<Button name="$parentTalentButton2" inherits="OptionsButtonTemplate" text="talent2"  id='2'>
+						<Anchors>	
+							<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$parentTalentButton1">
+							<Offset><AbsDimension x="12" y="0"/></Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnClick>HDH_ChangeTalentFrame(self, self:GetID())</OnClick>
+							<OnMouseUp>HDH_ChangeTalentFrame(self, self:GetID())</OnMouseUp>
+						</Scripts>
+					</Button>
+					<Button name="$parentTalentButton3" inherits="OptionsButtonTemplate" text="talent3"  id='3'>
+						<Anchors>
+							<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$parentTalentButton2">
+							<Offset><AbsDimension x="12" y="0"/></Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnClick>HDH_ChangeTalentFrame(self, self:GetID())</OnClick>
+							<OnMouseUp>HDH_ChangeTalentFrame(self, self:GetID())</OnMouseUp>
+						</Scripts>
+					</Button>
+					<Button name="$parentTalentButton4" inherits="OptionsButtonTemplate" text="talent4"  id='4'>
+						<Anchors>
+							<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$parentTalentButton3">
+							<Offset><AbsDimension x="12" y="0"/></Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnClick>HDH_ChangeTalentFrame(self, self:GetID())</OnClick>
+							<OnMouseUp>HDH_ChangeTalentFrame(self, self:GetID())</OnMouseUp>
+						</Scripts>
+					</Button>
+				</Frames>
+			</Frame>
+			
+			<Frame name="UnitOptionFrame" inherits="UnitOptionTemplate">
+				<Attributes>
+					<Attribute name="unit" value="player"/>
+				</Attributes>
+				<Size><AbsDimension x="600" y="400"/></Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" >
+					<Offset><AbsDimension x="20" y="-50"/></Offset>
+					</Anchor>
+					<Anchor point="RIGHT" >
+					<Offset><AbsDimension x="-20" y="0"/></Offset>
+					</Anchor>
+				</Anchors>
+				
+				<Frames>
+					<CheckButton name="$parentCheckButtonPet" inherits="OptionsCheckButtonTemplate" hidden="false">
+						<HitRectInsets>
+							<AbsInset left="0" right="-60" top="0" bottom="0"/>
+						</HitRectInsets>
+						<Anchors>
+							<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeTo="$parent">
+								<Offset><AbsDimension x="-165" y="-10"/></Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnLoad> getglobal(self:GetName().."Text"):SetText("소환수 포함") </OnLoad>
+							<OnClick> HDH_OnCheckedPet(self:GetChecked())</OnClick>
+							<OnEnter>
+								GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+								GameTooltip:AddLine("플레이어의 소환수도 추적 대상에 추가합니다\n|cffffffff플레이어 오라창에 같이 표시 됩니다");
+								GameTooltip:Show();
+							</OnEnter>
+							<OnLeave>
+								GameTooltip_Hide();
+							</OnLeave>
+						</Scripts>
+					</CheckButton>
+					
+					<CheckButton name="$parentCheckButtonPlayerDebuff" inherits="OptionsCheckButtonTemplate" hidden="true">
+						<HitRectInsets>
+							<AbsInset left="0" right="-60" top="0" bottom="0"/>
+						</HitRectInsets>
+						<Anchors>
+							<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeTo="$parent">
+								<Offset><AbsDimension x="-70" y="-10"/></Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnLoad> getglobal(self:GetName().."Text"):SetText("디버프 포함")</OnLoad>
+							<OnClick> HDH_OnCheckedPlayerDebuff(self:GetChecked())</OnClick>
+							<OnEnter>
+								GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+								GameTooltip:AddLine("플레이어의 디버프도 추적 대상에 추가합니다\n|cffffffff플레이어의 능력 상승 디버프를 위한 기능입니다\n(ex:비전충전몰, 악마화살 등..)");
+								GameTooltip:Show();
+							</OnEnter>
+							<OnLeave>
+								GameTooltip_Hide();
+							</OnLeave>
+						</Scripts>
+					</CheckButton>
+				
+					<CheckButton name="$parentCheckButtonReversH" inherits="OptionsCheckButtonTemplate">
+						<Anchors>
+							<Anchor point="BOTTOMLEFT" relativePoint="BOTTOMLEFT" relativeTo="$parent">
+								<Offset><AbsDimension x="20" y="35"/></Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnLoad> getglobal(self:GetName().."Text"):SetText("좌우 반전")</OnLoad>
+							<OnClick> HDH_OnRevers("h", self:GetParent():GetAttribute("unit"),self:GetChecked())</OnClick>
+							<OnEnter>
+								GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+								GameTooltip:AddLine("오라를 오른쪽에서 왼쪽 순서로 표시합니다");
+								GameTooltip:Show();
+							</OnEnter>
+							<OnLeave>
+								GameTooltip_Hide();
+							</OnLeave>
+						</Scripts>
+					</CheckButton>
+					
+					<CheckButton name="$parentCheckButtonReversV" inherits="OptionsCheckButtonTemplate">
+						<Anchors>
+							<Anchor point="LEFT" relativeTo="$parentCheckButtonReversH" relativePoint="RIGHT">
+							<Offset><AbsDimension x="100" y="0"/></Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnLoad> getglobal(self:GetName().."Text"):SetText("상하 반전") </OnLoad>
+							<OnClick> HDH_OnRevers("v", self:GetParent():GetAttribute("unit"),self:GetChecked())</OnClick>
+							<OnEnter>
+								GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+								GameTooltip:AddLine("오라를 아래쪽에서 위쪽 순서로 표시합니다");
+								GameTooltip:Show();
+							</OnEnter>
+							<OnLeave>
+								GameTooltip_Hide();
+							</OnLeave>
+						</Scripts>
+					</CheckButton>
+					
+					<Frame name="$parentDDMCooldown" inherits="UIDropDownMenuTemplate">
+						<Layers>
+							<Layer>
+								<FontString inherits="GameFontNormal" text="쿨 다운 방향" justifyV="CENTER">
+									<Anchors>
+										<Anchor point="RIGHT" relativePoint="LEFT" relativeTo="$parent" x="3" y="3"/>
+									</Anchors>
+								</FontString>
+							</Layer>
+						</Layers>
+						<Anchors>
+							<Anchor point="BOTTOMLEFT" relativePoint="BOTTOMLEFT" relativeTo="$parent">
+								<Offset><AbsDimension x="90" y="5"/></Offset>
+							</Anchor>
+						</Anchors>
+					</Frame>
+					
+					<Slider name="$parentSliderLine" inherits="AT_SliderTemplate" minValue="1" maxValue="10" valueStep="1">
+						<Anchors>
+							<Anchor point="BOTTOMRIGHT" relativeTo="$parent" relativePoint="BOTTOMRIGHT">
+							<Offset><AbsDimension x="-40" y="24"/></Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnLoad>getglobal(self:GetName() .. 'Low'):SetText(select(1,self:GetMinMaxValues()));
+									getglobal(self:GetName() .. 'High'):SetText(select(2,self:GetMinMaxValues()));
+									getglobal(self:GetName() .. 'Text'):SetText('가로 별 아이콘 표시 개수');
+									</OnLoad>
+							<OnValueChanged>
+											getglobal(self:GetName().. 'TextValue'):SetText(math.floor(value));
+											HDH_OnValueChanged(self, value, userInput)</OnValueChanged>
+						</Scripts>     
+					</Slider>
+				</Frames>
+			</Frame>
+			
+			<!--Button name="BtnPlayer" inherits="CharacterFrameTabButtonTemplate" text="Player" id ="1">
+				<Attributes>
+					<Attribute name="unit" value="player"/>
+				</Attributes>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="UnitOptionFrame" relativePoint="BOTTOMLEFT">
+						<Offset><AbsDimension x="0" y="4"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>HDH_OnLoadUnitTab(self)</OnLoad>
+					<OnClick>HDH_ChangeUnitTab(self,self:GetAttribute("unit"))</OnClick>
+					<OnEnable>_G["UnitOptionFrameCheckButtonPlayerDebuff"]:Hide()</OnEnable>
+					<OnDisable>_G["UnitOptionFrameCheckButtonPlayerDebuff"]:Show()</OnDisable>
+				</Scripts>
+			</Button>
+			
+			<Button name="BtnTarget" inherits="CharacterFrameTabButtonTemplate" text="Target" id ="2">
+				<Attributes>
+					<Attribute name="unit" value="target"/>
+					<Attribute name="subtitle" value="(Debuff)"/>
+				</Attributes>
+				<Anchors>
+					<Anchor point="LEFT" relativeTo="BtnPlayer" relativePoint="RIGHT">
+						<Offset><AbsDimension x="-15" y="0"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>HDH_OnLoadUnitTab(self)</OnLoad>
+					<OnClick>HDH_ChangeUnitTab(self,self:GetAttribute("unit"))</OnClick>
+				</Scripts>
+			</Button>
+			
+			<Button name="BtnFocus" inherits="CharacterFrameTabButtonTemplate" text="Focus" id ="2">
+				<Attributes>
+					<Attribute name="unit" value="focus"/>
+					<Attribute name="subtitle" value="(Debuff)"/>
+				</Attributes>
+				<Anchors>
+					<Anchor point="LEFT" relativeTo="BtnTarget" relativePoint="RIGHT">
+						<Offset><AbsDimension x="-15" y="0"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>HDH_OnLoadUnitTab(self)</OnLoad>
+					<OnClick>HDH_ChangeUnitTab(self,self:GetAttribute("unit"))</OnClick>
+				</Scripts>
+			</Button-->
+			
+			<Frame name="AlertDlg" inherits="DialogFrameTemplate"></Frame>
+			
+			
+			<Frame name="SettingFrame" inherits="OptionFrameTemplate" hidden = "true">
+				<Size><AbsDimension x="500" y="180"/></Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT">
+					<Offset><AbsDimension x="0" y="-5"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer level="ARTWORK">
+						<FontString name ="$TitleText" inherits="FontTemplateL" text="공용 설정" justifyH="RIGHT">
+							<Size><AbsDimension x="100" y="50" /></Size>
+							<Anchors>
+								<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" x="-25" y="-3"/>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+				<Frames>
+					<CheckButton name="$parentCheckButtonAlwaysShow" inherits="OptionsCheckButtonTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="$parent">
+							<Offset><AbsDimension x="40" y="-15"/></Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnLoad> getglobal(self:GetName().."Text"):SetText("비전투일 때도 표시") </OnLoad>
+							<OnClick> HDH_OnAlwaysShow(self:GetChecked())</OnClick>
+							<OnEnter>
+								GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+								GameTooltip:AddLine("전투 중이 아닐 때도 '항상'으로 설정된 오라들을 표시합니다");
+								GameTooltip:Show();
+							</OnEnter>
+							<OnLeave>
+								GameTooltip_Hide();
+							</OnLeave>
+						</Scripts>
+					</CheckButton>
+				
+					<CheckButton name="$parentCheckButtonShowCooldown" inherits="OptionsCheckButtonTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="$parentCheckButtonAlwaysShow" relativePoint="BOTTOMLEFT">
+							<Offset><AbsDimension x="0" y="0"/></Offset>
+							</Anchor>
+						</Anchors>
+						
+						<Scripts>
+							<OnLoad> getglobal(self:GetName().."Text"):SetText("쿨다운 숫자 표시") </OnLoad>
+							<OnClick> HDH_OnCheckShowCooldown(self:GetChecked())</OnClick>
+							<OnEnter>
+								GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+								GameTooltip:AddLine("아이콘에 쿨다운 숫자를 표시합니다");
+								GameTooltip:Show();
+							</OnEnter>
+							<OnLeave>
+								GameTooltip_Hide();
+							</OnLeave>
+						</Scripts>
+					</CheckButton>
+				
+					<Button name="$parentButtonColorBuff" inherits="ColorPickerTemplate">
+						<Size><AbsDimension x="150" y="26"/></Size>
+						<Anchors>
+							<Anchor point="LEFT" relativeTo="$parentCheckButtonAlwaysShow" relativePoint="RIGHT">
+								<Offset x="150" y="0"/>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnLoad>_G[self:GetName().."Text"]:SetText("버프 테두리 색상")</OnLoad>
+							<OnClick> if not ColorPickerFrame:IsShown() then
+										ColorPickerFrame:SetColorRGB(unpack(DB_OPTION.icon.buff_color))
+										ColorPickerFrame.hasOpacity = false
+										ColorPickerFrame.func = function() end
+										ColorPickerFrame.opacityFunc  = HDH_OnSelectedColor
+										ColorPickerFrame.arg = 'buff'
+										ColorPickerFrame:Show();
+									end
+							</OnClick>
+						</Scripts>
+					</Button>
+					
+					<Button name="$parentButtonColorDebuff" inherits="ColorPickerTemplate">
+						<Size><AbsDimension x="150" y="26"/></Size>
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="$parentButtonColorBuff" relativePoint="BOTTOMLEFT">
+								<Offset x="0" y="0"/>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnLoad>_G[self:GetName().."Text"]:SetText("디버프 테두리 색상")</OnLoad>
+							<OnClick> if not ColorPickerFrame:IsShown() then
+										ColorPickerFrame:SetColorRGB(unpack(DB_OPTION.icon.debuff_color))
+										ColorPickerFrame.hasOpacity = false
+										ColorPickerFrame.func = function() end
+										ColorPickerFrame.opacityFunc  = HDH_OnSelectedColor
+										ColorPickerFrame.arg = 'debuff'
+										ColorPickerFrame:Show();
+									end
+							</OnClick>
+						</Scripts>
+					</Button>
+				
+					<Slider name="$parentSliderFont" inherits="AT_SliderTemplate" minValue="5" maxValue="20">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="$parentCheckButtonShowCooldown" relativePoint="BOTTOMLEFT">
+							<Offset><AbsDimension x="0" y="-20"/></Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnLoad>getglobal(self:GetName() .. 'Low'):SetText(select(1,self:GetMinMaxValues()));
+									getglobal(self:GetName() .. 'High'):SetText(select(2,self:GetMinMaxValues()));
+									getglobal(self:GetName() .. 'Text'):SetText('Font size');
+									self:SetValueStep(1)
+									</OnLoad>
+							<OnValueChanged>getglobal(self:GetName().. 'TextValue'):SetText(math.floor(value));
+											HDH_OnValueChanged(self, value, userInput)</OnValueChanged>
+						</Scripts>     
+					</Slider>
+					 
+					<Slider name="$parentSliderIcon" inherits="AT_SliderTemplate" minValue="20" maxValue="50">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="$parentSliderFont" relativePoint="BOTTOMLEFT">
+								<Offset x="0" y="-30"/>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnLoad>getglobal(self:GetName() .. 'Low'):SetText(select(1,self:GetMinMaxValues()));
+									getglobal(self:GetName() .. 'High'):SetText(select(2,self:GetMinMaxValues()));
+									getglobal(self:GetName() .. 'Text'):SetText('Icon size');
+									self:SetValueStep(1);
+									</OnLoad>
+							<OnValueChanged>getglobal(self:GetName().. 'TextValue'):SetText(math.floor(value));
+											HDH_OnValueChanged(self, value, userInput)</OnValueChanged>
+						</Scripts>     
+					 </Slider>
+					 
+					 <Slider name="$parentSliderOnAlpha" inherits="AT_SliderTemplate" minValue="10" maxValue="100">
+						<Anchors>
+							<Anchor point="LEFT" relativeTo="$parentSliderFont" relativePoint="RIGHT">
+							<Offset><AbsDimension x="30" y="0"/></Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnLoad>getglobal(self:GetName() .. 'Low'):SetText("10%");
+									getglobal(self:GetName() .. 'High'):SetText("100%");
+									getglobal(self:GetName() .. 'Text'):SetText("활성화 아이콘 불투명도");
+									self:SetValueStep(0.1)</OnLoad>
+							<OnValueChanged>getglobal(self:GetName().. 'TextValue'):SetText(("%d%%"):format(value)); 
+											HDH_OnValueChanged(self, value, userInput)</OnValueChanged>
+						</Scripts>     
+					</Slider>
+					 
+					<Slider name="$parentSliderOffAlpha" inherits="AT_SliderTemplate" minValue="10" maxValue="100" setValueStep="0.1">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="$parentSliderOnAlpha" relativePoint="BOTTOMLEFT">
+								<Offset x="0" y="-30"/>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnLoad>getglobal(self:GetName() .. 'Low'):SetText("10%");
+									getglobal(self:GetName() .. 'High'):SetText("100%");
+									getglobal(self:GetName() .. 'Text'):SetText('비활성화 아이콘 불투명도');
+									self:SetValueStep(0.1)</OnLoad>
+							<OnValueChanged>getglobal(self:GetName().. 'TextValue'):SetText(("%d%%"):format(value));
+											HDH_OnValueChanged(self, value, userInput)</OnValueChanged>
+						</Scripts>     
+					 </Slider>
+					 
+					<Button name="$parentButtonClose" inherits="OptionsButtonTemplate" text="닫기">
+						<Anchors>
+							<Anchor point="BOTTOMRIGHT">
+							<Offset><AbsDimension x="-15" y="16"/></Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnClick> self:GetParent():Hide(); </OnClick>
+						</Scripts>
+					</Button>
+					
+					<Button name="$parentButtonProfile" inherits="OptionsButtonTemplate" text="프로필 보기">
+						<Anchors>
+							<Anchor point="BOTTOM" relativeTo="$parentButtonClose" relativePoint="TOP">
+							<Offset><AbsDimension x="0" y="0"/></Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnClick>if ProfileFrame:IsShown() then 
+										ProfileFrame:Hide() 
+									else ProfileFrame:Show() end </OnClick>
+						</Scripts>
+					</Button>
+			
+					<Button name="$parentButtonResetAura" inherits="OptionsButtonTemplate" text="Aura 초기화">
+						<Anchors>
+							<Anchor point="BOTTOM" relativeTo="$parentButtonProfile" relativePoint="TOP">
+							<Offset><AbsDimension x="0" y="5"/></Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnClick> if AlertDlg:IsShown() then return end
+									  AlertDlg.func = HDH_OnSettingReset
+									  AlertDlg.arg = "ARUA"
+								      AlertDlg.text = "|cffff0000캐릭터의\n모든 버프와 디버프 목록을\n|cffffffff초기화 하시겠습니까?"
+									  AlertDlg:Show() </OnClick>
+						</Scripts>
+					</Button>
+					
+					<Button name="$parentButtonResetUI" inherits="OptionsButtonTemplate" text="UI 초기화">
+						<Anchors>
+							<Anchor point="BOTTOM" relativeTo="$parentButtonResetAura" relativePoint="TOP">
+							<Offset><AbsDimension x="0" y="0"/></Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnClick> if AlertDlg:IsShown() then return end
+									  AlertDlg.func = HDH_OnSettingReset
+									  AlertDlg.arg = "UI"
+								      AlertDlg.text = "|cffff0000캐릭터의\n모든 UI 관련 설정을\n|cffffffff초기화 하시겠습니까?"
+									  AlertDlg:Show()  </OnClick>
+						</Scripts>
+					</Button>
+					 
+					 <Frame name="ProfileFrame" inherits="OptionFrameTemplate" hidden = "true">
+						<Size><AbsDimension x="500" y="80"/></Size>
+						<Anchors>
+							<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT">
+							<Offset><AbsDimension x="0" y="-5"/></Offset>
+							</Anchor>
+						</Anchors>
+						<Layers>
+							<Layer level="ARTWORK">
+								<FontString name ="$TitleText" inherits="FontTemplateL" text="프로필 설정" justifyH="RIGHT">
+									<Size><AbsDimension x="120" y="50" /></Size>
+									<Anchors>
+										<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" x="-25" y="-3"/>
+									</Anchors>
+								</FontString>
+								
+								<FontString name ="$parentText" inherits="FontTemplateM" text="프로필 설정 캐릭터:" justifyH="LEFT">
+									<Size><AbsDimension x="120" y="50" /></Size>
+									<Anchors>
+										<Anchor point="TOPLEFT" relativePoint="TOPLEFT" x="23" y="0"/>
+									</Anchors>
+								</FontString>
+								
+								<FontString name ="$parentTextCur" inherits="FontTemplateM" text="불동이" justifyH="LEFT">
+									<Size><AbsDimension x="300" y="50" /></Size>
+									<Anchors>
+										<Anchor point="LEFT" relativePoint="RIGHT" relativeTo="$parentText" x="5" y="0"/>
+									</Anchors>
+								</FontString>
+							</Layer>
+						</Layers>
+						
+						<Frames>
+							<Button name="$parentButtonSet" inherits="OptionsButtonTemplate" text="프로필 저장">
+								<Anchors>
+									<Anchor point ="BOTTOMLEFT" relativePoint="BOTTOMLEFT">
+									<Offset><AbsDimension x="20" y="17"/></Offset>
+									</Anchor>
+								</Anchors>
+								<Scripts>
+									<OnClick> if AlertDlg:IsShown() then return end
+									  AlertDlg.func = HDH_OnClick_SaveProfile
+								      AlertDlg.text = "현재 캐릭터의 UI 설정을 프로필로|cffffffff\n저장 하시겠습니까?\n|cffff0000(이전 프로필이 삭제 되며, Aura는 저장되지 않습니다)"
+									  AlertDlg:Show()  </OnClick>
+									<OnEnter>
+										GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+										GameTooltip:AddLine("현재 캐릭터의 UI 설정을 프로필로 저장합니다\n다른 캐릭터에서 이 설정을 불러올 수 있습니다\n(프로필은 오직 하나만 저장됩니다)");
+										GameTooltip:Show();
+									</OnEnter>
+									<OnLeave>
+										GameTooltip_Hide();
+									</OnLeave>
+								</Scripts>
+							</Button>
+							
+							<Button name="$parentButtonLoad" inherits="OptionsButtonTemplate" text="프로필 로드">
+								<Anchors>
+									<Anchor point ="LEFT" relativeTo="$parentButtonSet" relativePoint="RIGHT">
+									<Offset><AbsDimension x="5" y="0"/></Offset>
+									</Anchor>
+								</Anchors>
+								<Scripts>
+									<OnClick> if AlertDlg:IsShown() then return end
+									  AlertDlg.func = HDH_OnClick_LoadProfile
+								      AlertDlg.text = "현재 캐릭터의 UI설정을\n프로필 캐릭터와 동일하게 \n|cffffffff설정 하시겠습니까?\n"
+									  AlertDlg:Show()  </OnClick>
+									<OnEnter>
+										GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+										GameTooltip:AddLine("프로필의 캐릭터의 UI 설정을\n현재 캐릭터에 적용 합니다\n(Aura 목록과는 무관합니다)");
+										GameTooltip:Show();
+									</OnEnter>
+									<OnLeave>
+										GameTooltip_Hide();
+									</OnLeave>
+								</Scripts>
+							</Button>
+							
+							<Button name="$parentButtonReset" inherits="OptionsButtonTemplate" text="프로필 초기화">
+								<Anchors>
+									<Anchor point ="LEFT" relativeTo="$parentButtonLoad" relativePoint="RIGHT">
+									<Offset><AbsDimension x="80" y="0"/></Offset>
+									</Anchor>
+								</Anchors>
+								<Scripts>
+									<OnClick> if AlertDlg:IsShown() then return end
+									  AlertDlg.func = HDH_OnClick_ResetProfile
+								      AlertDlg.text = "|cffff0000프로필 설정을\n|cffffffff초기화 하시겠습니까?"
+									  AlertDlg:Show()   </OnClick>
+								</Scripts>
+							</Button>
+							
+							<Button name="$parentButtonClose" inherits="OptionsButtonTemplate" text="닫기">
+								<Anchors>
+									<Anchor point="BOTTOMRIGHT">
+									<Offset><AbsDimension x="-15" y="16"/></Offset>
+									</Anchor>
+								</Anchors>
+								<Scripts>
+									<OnShow></OnShow>
+									<OnHide></OnHide>
+									<OnClick> ProfileFrame:Hide();</OnClick>
+								</Scripts>
+							</Button>
+						</Frames>
+						<Scripts>
+							<OnShow> if DB_PROFILE and DB_PROFILE.OPTION then 
+										_G["ProfileFrameTextCur"]:SetText(DB_PROFILE.ID_NAME) 
+									 else
+										_G["ProfileFrameTextCur"]:SetText("(none)") 
+									end
+							</OnShow>
+						</Scripts>
+					</Frame>
+				</Frames>
+			</Frame>
+			
+			<Button name="$parentButtonClose" inherits="OptionsButtonTemplate" text="닫기">
+				<Anchors>
+					<Anchor point="BOTTOMRIGHT">
+					<Offset><AbsDimension x="-15" y="16"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnShow></OnShow>
+					<OnHide></OnHide>
+					<OnClick> OptionFrame:Hide();</OnClick>
+				</Scripts>
+			</Button>
+			
+			<Button name="$parentButtonSettingShow" inherits="OptionsButtonTemplate" text="공용 설정">
+				<Anchors>
+					<Anchor point="RIGHT" relativeTo="$parentButtonClose" relativePoint="LEFT">
+					<Offset><AbsDimension x="-15" y=""/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>if SettingFrame:IsShown() then 
+								SettingFrame:Hide() 
+							else SettingFrame:Show() end </OnClick>
+				</Scripts>
+			</Button>
+			
+			<CheckButton name="$parentCheckButtonMove" inherits="OptionsCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="RIGHT" relativeTo="$parentButtonSettingShow" relativePoint="LEFT">
+					<Offset><AbsDimension x="-100" y="-3"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad> getglobal(self:GetName().."Text"):SetText("아이콘 이동 하기") </OnLoad>
+					<OnClick>HDH_OnMoveAble(self:GetChecked())</OnClick>
+				</Scripts>
+			</CheckButton>
+			
+			<CheckButton name="$parentCheckButtonIDShow" inherits="OptionsCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="BOTTOMLEFT" x="16" y="10">
+						
+					</Anchor>
+				</Anchors>
+				
+				<Scripts>
+					<OnLoad> getglobal(self:GetName().."Text"):SetText("툴팁에 Spell ID 표시") </OnLoad>
+					<OnClick> HDH_OnCheckTooltipShow(self:GetChecked())</OnClick>
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						GameTooltip:AddLine("주문 툴팁에 주문 ID 를 보이게 합니다");
+						GameTooltip:Show();
+					</OnEnter>
+					<OnLeave>
+						GameTooltip_Hide();
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
+		</Frames>
+		
+		<Scripts>
+			<OnLoad> HDH_Option_OnLoad(self); </OnLoad>
+			<OnShow> HDH_Option_OnShow(self); </OnShow>
+			<OnMouseDown>self:StartMoving()</OnMouseDown>
+			<OnMouseUp>self:StopMovingOrSizing()</OnMouseUp>
+		</Scripts>
+	</Frame>	
+</Ui>
+

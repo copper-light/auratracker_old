@@ -1,0 +1,25 @@
+﻿## Interface: 70000
+## Title: HDH_AuraTracking
+## Author: hdh
+## Notes: 설정창 명령어 /at, /auratracking
+## Version: 703.13
+## SavedVariables: DB_PROFILE
+## SavedVariablesPerCharacter: DB_AURA, DB_OPTION, DB_FRAME_LIST
+
+Tooltip.lua
+
+Tracker\AuraTracking.lua
+Tracker\CooldownTracking.lua
+Tracker\PowerTracking.lua
+Tracker\ComboPointTracking.lua
+Tracker\DKRuneTracking.lua
+Tracker\TotemTracking.lua
+Tracker\StaggerTracking.lua
+Tracker\HealthTracking.lua
+
+lib\LibCompress\LibStub.lua
+lib\LibCompress\LibCompress.lua
+lib\AceSerializer-3.0\AceSerializer-3.0.xml
+lib\WeakAuraLib\Transmission.lua
+
+Option.xml

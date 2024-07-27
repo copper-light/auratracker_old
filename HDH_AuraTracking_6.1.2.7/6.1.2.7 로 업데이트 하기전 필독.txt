@@ -1,0 +1,7 @@
+※ 사제, 토템 플러그인을 모두 통합하여, Class 라는 플러그인으로 변경하였습니다.
+
+기존에 
+HDH_AuraTracking_Totem
+HDH_AuraTracking_Shadow 
+
+플러그인이 설치되신 분들은 업데이트 전에 반드시 해당 플러그인 폴더를 삭제 하여주시기 바랍니다.

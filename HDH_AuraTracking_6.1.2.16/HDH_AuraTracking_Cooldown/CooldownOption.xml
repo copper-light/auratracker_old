@@ -1,0 +1,153 @@
+﻿<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
+	<Script file="CooldownOption.lua"/>
+	
+	<Frame name="CooldownSettingFrame" parent="SettingFrameSFContents"  hidden = "true">
+		<Size><AbsDimension x="250" y="120"/></Size>
+		<Anchors>
+			<Anchor point="TOPLEFT" relativePoint="TOPLEFT">
+			<Offset><AbsDimension x="0" y="-67"/></Offset>
+			</Anchor>
+		</Anchors>
+		<Layers>
+			<Layer level="ARTWORK">
+				<FontString inherits="FontTemplateM" text="쿨다운 추적 설정" justifyH="LEFT">
+					<Size><AbsDimension x="110" y="50" /></Size>
+					<Color r="1" g="1" b="1"/>
+					<Anchors>
+						<Anchor point="TOPLEFT" relativePoint="TOPLEFT" x="20" y="-200"/>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Frames>
+			<Button name="$parentButtonColor" inherits="ColorPickerTemplate">
+				<Size><AbsDimension x="150" y="26"/></Size>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SettingFrameSFContentsButtonColorCooldownBg" relativePoint="BOTTOMLEFT">
+						<Offset><AbsDimension x="0" y="0"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>_G[self:GetName().."Text"]:SetText("쿨다운 추적 테두리 색상")</OnLoad>
+					<OnClick>HDH_CT_ShowColorPicker()
+					</OnClick>
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						GameTooltip:AddLine("쿨다운 추적 전용 설정");
+						GameTooltip:Show();
+					</OnEnter>
+					<OnLeave>
+						GameTooltip_Hide();
+					</OnLeave>
+				</Scripts>
+			</Button>
+			
+			<CheckButton name="$parentCheckButtonDesaturation" inherits="OptionsCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="$parentButtonColor" relativePoint="BOTTOMLEFT">
+					<Offset><AbsDimension x="-4" y="-55"/></Offset>
+					</Anchor>
+				</Anchors>
+				
+				<Scripts>
+					<OnLoad> getglobal(self:GetName().."Text"):SetText("쿨다운 중이면, 흑백으로 표시") </OnLoad>
+					<OnClick> HDH_CT_OnCheckDesaturation(self:GetChecked())</OnClick>
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						GameTooltip:AddLine("쿨다운 추적 전용 설정\n쿨다운 중인 스킬(아이템)을 흑백으로 표시 합니다");
+						GameTooltip:Show();
+					</OnEnter>
+					<OnLeave>
+						GameTooltip_Hide();
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
+			
+			<Slider name="$parentSliderMaxTime" inherits="AT_SliderTemplate" minValue="0" maxValue="3000" setValueStep="1">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="$parentCheckButtonDesaturation" relativePoint="TOPRIGHT">
+					<Offset><AbsDimension x="178" y="-20"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>getglobal(self:GetName() .. 'Low'):SetText("없음");
+							getglobal(self:GetName() .. 'High'):SetText("2:00");
+							getglobal(self:GetName() .. 'Text'):SetText('표시 할 최대 시간');
+							self:SetValueStep(0.1)</OnLoad>
+					<OnValueChanged>if value == 0 then
+										getglobal(self:GetName().. 'TextValue'):SetText("제한 없음");
+									else
+										getglobal(self:GetName().. 'TextValue'):SetText(("%d:%02d"):format(value/60, value%60));
+									end
+									HDH_CT_OnValueChanged(self, value, userInput)</OnValueChanged>
+									
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						GameTooltip:AddLine("쿨다운 추적 전용 설정\n설정된 시간 이상의 스킬은 표시하지 않습니다\n(항상으로 설정된 스킬에는 적용되지 않습니다)");
+						GameTooltip:Show();
+					</OnEnter>
+					<OnLeave>
+						GameTooltip_Hide();
+					</OnLeave>
+					<OnMouseUp>
+						HDH_Adjust_Slider(self, self:GetValue(), 0, 3000)
+					</OnMouseUp>
+				</Scripts>     
+			</Slider>
+			
+		</Frames>
+		
+		<Scripts>
+			<OnShow></OnShow>
+			<OnLoad></OnLoad>
+		</Scripts>
+	</Frame>
+	
+	<Frame name="$parentDDMCooldownUnit" inherits="UIDropDownMenuTemplate" parent="AddUnitTabFrame" hidden="false">
+		<Layers>
+			<Layer level = "ARTWORK">
+				<FontString inherits="GAMEFONTNORMAL" text="(선택 사항)">
+					<Anchors><Anchor point="RIGHT" relativePoint="LEFT" x="10" y="0"/></Anchors>
+				</FontString>
+				<FontString inherits="GAMEFONTNORMAL" text="프레임이 활성화 되었을 때만 표시">
+					<Anchors><Anchor point="LEFT" relativePoint="RIGHT" x="-10" y="0"/></Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Anchors>
+			<Anchor point="TOP" relativePoint="BOTTOM" relativeTo="$parentDDMUnitList">
+				<Offset>
+					<AbsDimension x="70" y="0"/>
+				</Offset>
+			</Anchor>
+		</Anchors>
+		<Scripts>
+			<OnEnter>
+				GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+				GameTooltip:AddLine("선택할 경우, 해당 유닛프레임이 활성화 되었을때만\n쿨다운 아이콘이 화면에 표시 됩니다.\n|cffffffff(예: Pet 으로 설정할 경우,\n소환수를 소환하였을 때만, 쿨다운 아이콘 표시)");
+				GameTooltip:Show();
+			</OnEnter>
+			<OnLeave>
+				GameTooltip_Hide();
+			</OnLeave>
+		</Scripts>
+	</Frame>
+	
+	<Button name="BtnShowCooldownSetting" inherits="OptionsButtonTemplate" parent="UnitOptionFrame" text="세부 설정" hidden="true">
+		<Anchors>
+			<Anchor point="TOPRIGHT" >
+			<Offset><AbsDimension x="-10" y="-10"/></Offset>
+			</Anchor>
+		</Anchors>
+		<Scripts>
+			<OnLoad></OnLoad>
+			<OnClick>
+					if CooldownSettingFrame:IsShown() then
+						CooldownSettingFrame:Hide()
+					else
+						CooldownSettingFrame:Show()
+					end
+			</OnClick>
+		</Scripts>
+	</Button>
+</Ui>

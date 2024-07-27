@@ -1,0 +1,12 @@
+﻿## Interface: 60100
+## Title: HDH_AuraTracking
+## Author: hdh
+## Notes: 설정창 명령어 /at, /auratracking
+## Version: 1.4.6
+## SavedVariables: DB_PROFILE
+## SavedVariablesPerCharacter: AuraTrckingCharacter, DB_AURA, DB_SPELL, DB_OPTION
+
+Tooltip.lua
+AuraTracking.lua
+
+Option.xml

@@ -1,0 +1,12 @@
+﻿## Interface: 60100
+## Title: HDH_AuraTracking_Class
+## Author: hdh
+## Notes: AuraTracking plugin - for Class(Totem, Mushroom, Summon, Rune, Shadow etc..)
+## Version: 6.1.2
+## Dependencies: HDH_AuraTracking
+
+PowerTracking.lua
+PowerTracking_Druid.lua
+PowerTracking_DK.lua
+TotemTracking.lua
+ShadowTracking.lua

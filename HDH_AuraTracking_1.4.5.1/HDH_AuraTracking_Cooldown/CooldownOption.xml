@@ -1,0 +1,254 @@
+﻿<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\FrameXML\UI.xsd">
+	<Script file="CooldownOption.lua"/>
+	
+	<Frame name="CooldownSettingFrame" inherits="OptionFrameTemplate" parent="OptionFrame"  hidden = "true">
+		<Size><AbsDimension x="200" y="520"/></Size>
+		<Anchors>
+			<Anchor point="RIGHT" relativePoint="LEFT">
+			<Offset><AbsDimension x="-5" y="0"/></Offset>
+			</Anchor>
+		</Anchors>
+		<Layers>
+			<Layer level="ARTWORK">
+				<FontString name ="$TitleText" inherits="FontTemplateL" text="쿨다운 기능 설정" justifyH="CENTER">
+					<Size><AbsDimension x="150" y="50" /></Size>
+					<Anchors>
+						<Anchor point="TOP" relativePoint="TOP" x="0" y="-3"/>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Frames>
+			<CheckButton name="$parentCheckButtonAlwaysShow" inherits="OptionsCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="$parent">
+					<Offset><AbsDimension x="12" y="-60"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad> getglobal(self:GetName().."Text"):SetText("비전투일 때도 표시") </OnLoad>
+					<OnClick> HDH_ATC_OnAlwaysShow(self:GetChecked())</OnClick>
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						GameTooltip:AddLine("전투 중이 아닐 때도 '항상'으로 설정된 스킬을 표시합니다");
+						GameTooltip:Show();
+					</OnEnter>
+					<OnLeave>
+						GameTooltip_Hide();
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
+		
+			<CheckButton name="$parentCheckButtonShowCooldown" inherits="OptionsCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="TOP" relativeTo="$parentCheckButtonAlwaysShow" relativePoint="BOTTOM">
+					<Offset><AbsDimension x="0" y="0"/></Offset>
+					</Anchor>
+				</Anchors>
+				
+				<Scripts>
+					<OnLoad> getglobal(self:GetName().."Text"):SetText("쿨다운 숫자 표시") </OnLoad>
+					<OnClick> HDH_ATC_OnCheckShowCooldown(self:GetChecked())</OnClick>
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						GameTooltip:AddLine("아이콘에 쿨다운 숫자를 표시합니다");
+						GameTooltip:Show();
+					</OnEnter>
+					<OnLeave>
+						GameTooltip_Hide();
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
+			
+			<CheckButton name="$parentCheckButtonShowAble" inherits="OptionsCheckButtonTemplate">
+				<Anchors>
+					<Anchor point="TOP" relativeTo="$parentCheckButtonShowCooldown" relativePoint="BOTTOM">
+					<Offset><AbsDimension x="0" y="0"/></Offset>
+					</Anchor>
+				</Anchors>
+				
+				<Scripts>
+					<OnLoad> getglobal(self:GetName().."Text"):SetText("사용가능시 컬러 아이콘 표시") </OnLoad>
+					<OnClick> HDH_ATC_OnCheckShowAble(self:GetChecked())</OnClick>
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						GameTooltip:AddLine("사용 가능한 스킬은 컬러로, 쿨다운이 돌고 있는 스킬은 흑백으로 표시 합니다");
+						GameTooltip:Show();
+					</OnEnter>
+					<OnLeave>
+						GameTooltip_Hide();
+					</OnLeave>
+				</Scripts>
+			</CheckButton>
+			
+			 <Button name="$parentButtonColor" inherits="ColorPickerTemplate">
+				<Size><AbsDimension x="150" y="26"/></Size>
+				<Anchors>
+					<Anchor point="TOP" relativeTo="$parentCheckButtonShowAble" relativePoint="BOTTOM">
+						<Offset x="66" y="0"/>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>_G[self:GetName().."Text"]:SetText("아이콘 테두리 색상")</OnLoad>
+					<OnClick> if not ColorPickerFrame:IsShown() then
+								ColorPickerFrame:SetColorRGB(unpack(DB_OPTION.cooldown.icon.color))
+								ColorPickerFrame.hasOpacity = false
+								ColorPickerFrame.func = function() end
+								ColorPickerFrame.opacityFunc  = HDH_ATC_OnSelectedColor
+								ColorPickerFrame:Show();
+							end
+					</OnClick>
+				</Scripts>
+			</Button>
+	
+			 <Slider name="$parentSliderMaxTime" inherits="AT_SliderTemplate" minValue="0" maxValue="120" setValueStep="1">
+				<Anchors>
+					<Anchor point="TOP" relativeTo="$parentButtonColor" relativePoint="BOTTOM">
+					<Offset><AbsDimension x="9" y="-30"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>getglobal(self:GetName() .. 'Low'):SetText("제한\n없음");
+							getglobal(self:GetName() .. 'High'):SetText("2:00");
+							getglobal(self:GetName() .. 'Text'):SetText('표시 할 최대 시간');
+							self:SetValueStep(0.1)</OnLoad>
+					<OnValueChanged>if value == 0 then
+										getglobal(self:GetName().. 'TextValue'):SetText("제한 없음");
+									else
+										getglobal(self:GetName().. 'TextValue'):SetText(("%d:%02d"):format(value/60, value%60));
+									end
+									HDH_ATC_OnValueChanged(self, value, userInput)</OnValueChanged>
+									
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_RIGHT");
+						GameTooltip:AddLine("설정된 시간 이상의 스킬은 표시하지 않습니다\n(항상으로 설정된 스킬에는 적용되지 않습니다)");
+						GameTooltip:Show();
+					</OnEnter>
+					<OnLeave>
+						GameTooltip_Hide();
+					</OnLeave>
+				</Scripts>     
+			 </Slider>
+		
+			<Slider name="$parentSliderFont" inherits="AT_SliderTemplate" minValue="5" maxValue="20">
+				<Anchors>
+					<Anchor point="TOP" relativeTo="$parentSliderMaxTime" relativePoint="BOTTOM">
+					<Offset><AbsDimension x="0" y="-40"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>getglobal(self:GetName() .. 'Low'):SetText(select(1,self:GetMinMaxValues()));
+							getglobal(self:GetName() .. 'High'):SetText(select(2,self:GetMinMaxValues()));
+							getglobal(self:GetName() .. 'Text'):SetText('Font size');
+							self:SetValueStep(1)
+							</OnLoad>
+					<OnValueChanged>getglobal(self:GetName().. 'TextValue'):SetText(math.floor(value));
+									HDH_ATC_OnValueChanged(self, value, userInput)</OnValueChanged>
+				</Scripts>     
+			</Slider>
+			 
+			<Slider name="$parentSliderIcon" inherits="AT_SliderTemplate" minValue="20" maxValue="50">
+				<Anchors>
+					<Anchor point="TOP" relativeTo="$parentSliderFont" relativePoint="BOTTOM">
+					<Offset><AbsDimension x="0" y="-40"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>getglobal(self:GetName() .. 'Low'):SetText(select(1,self:GetMinMaxValues()));
+							getglobal(self:GetName() .. 'High'):SetText(select(2,self:GetMinMaxValues()));
+							getglobal(self:GetName() .. 'Text'):SetText('Icon size');
+							self:SetValueStep(1);
+							</OnLoad>
+					<OnValueChanged>getglobal(self:GetName().. 'TextValue'):SetText(math.floor(value));
+									HDH_ATC_OnValueChanged(self, value, userInput)</OnValueChanged>
+				</Scripts>     
+			 </Slider>
+			 
+			 <Slider name="$parentSliderOnAlpha" inherits="AT_SliderTemplate" minValue="10" maxValue="100">
+				<Anchors>
+					<Anchor point="TOP" relativeTo="$parentSliderIcon" relativePoint="BOTTOM">
+					<Offset><AbsDimension x="0" y="-40"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>getglobal(self:GetName() .. 'Low'):SetText("10%");
+							getglobal(self:GetName() .. 'High'):SetText("100%");
+							getglobal(self:GetName() .. 'Text'):SetText("활성화 아이콘 불투명도");
+							self:SetValueStep(0.1)</OnLoad>
+					<OnValueChanged>getglobal(self:GetName().. 'TextValue'):SetText(("%d%%"):format(value)); 
+									HDH_ATC_OnValueChanged(self, value, userInput)</OnValueChanged>
+				</Scripts>     
+			</Slider>
+			 
+			<Slider name="$parentSliderOffAlpha" inherits="AT_SliderTemplate" minValue="10" maxValue="100" setValueStep="0.1">
+				<Anchors>
+					<Anchor point="TOP" relativeTo="$parentSliderOnAlpha" relativePoint="BOTTOM">
+					<Offset><AbsDimension x="0" y="-40"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnLoad>getglobal(self:GetName() .. 'Low'):SetText("10%");
+							getglobal(self:GetName() .. 'High'):SetText("100%");
+							getglobal(self:GetName() .. 'Text'):SetText('비활성화 아이콘 불투명도');
+							self:SetValueStep(0.1)</OnLoad>
+					<OnValueChanged>getglobal(self:GetName().. 'TextValue'):SetText(("%d%%"):format(value));
+									HDH_ATC_OnValueChanged(self, value, userInput)</OnValueChanged>
+				</Scripts>     
+			 </Slider>
+			
+			<Button name="$parentButtonClose" inherits="OptionsButtonTemplate" text="닫기">
+				<Anchors>
+					<Anchor point="TOP" relativeTo="$parentSliderOffAlpha" relativePoint="BOTTOM">
+					<Offset><AbsDimension x="0" y="-40"/></Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick> self:GetParent():Hide(); </OnClick>
+				</Scripts>
+			</Button>
+			
+		</Frames>
+		
+			<Scripts>
+				<OnShow>HDH_ATC_SetUI()</OnShow>
+			</Scripts>
+	</Frame>
+	
+	<Button name="BtnShowCooldownSetting" inherits="OptionsButtonTemplate" parent="OptionFrame" text="세부 설정" hidden="true">
+		<Anchors>
+			<Anchor point="BOTTOMRIGHT" >
+			<Offset><AbsDimension x="-35" y="440"/></Offset>
+			</Anchor>
+		</Anchors>
+		<Scripts>
+			<OnLoad></OnLoad>
+			<OnClick>
+					if CooldownSettingFrame:IsShown() then
+						CooldownSettingFrame:Hide()
+					else
+						CooldownSettingFrame:Show()
+					end
+			</OnClick>
+		</Scripts>
+	</Button>
+	
+	<Button name="BtnCooldown" inherits="CharacterFrameTabButtonTemplate" parent="OptionFrame"  text="Cooldown" id ="3">
+		<Attributes>
+			<Attribute name="unit" value="cooldown"/>
+		</Attributes>
+		<Anchors>
+			<Anchor point="LEFT" relativeTo="BtnFocus" relativePoint="RIGHT">
+				<Offset><AbsDimension x="-15" y="0"/></Offset>
+			</Anchor>
+		</Anchors>
+		<Scripts>
+			<OnLoad></OnLoad>
+			<OnClick>HDH_ATC_ChangeCooldownTab(self) 
+					
+			</OnClick>
+		</Scripts>
+	</Button>
+
+
+	
+</Ui>

@@ -1,0 +1,9 @@
+## Interface: 60000
+## Title: HDH_AuraTracking_Cooldown
+## Author: hdh
+## Notes: 설정창 명령어 /at, /auratracking
+## Version: 1.4.6
+## Dependencies: HDH_AuraTracking
+
+CooldownTracking.lua
+CooldownOption.xml

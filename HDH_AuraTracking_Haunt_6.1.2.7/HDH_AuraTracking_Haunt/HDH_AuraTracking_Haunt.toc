@@ -1,0 +1,8 @@
+﻿## Interface: 60100
+## Title: HDH_AuraTracking_Haunt
+## Author: hdh
+## Notes: 유령출몰 사용 가능 횟수 체크 플러그인
+## Version: 6.1.7
+## Dependencies: HDH_AuraTracking, HDH_AuraTracking_Cooldown
+
+HauntTracking.lua

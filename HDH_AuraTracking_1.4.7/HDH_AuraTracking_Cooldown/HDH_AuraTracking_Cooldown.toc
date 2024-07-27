@@ -1,0 +1,9 @@
+﻿## Interface: 60100
+## Title: HDH_AuraTracking_Cooldown
+## Author: hdh
+## Notes: AuraTracking 쿨다운 추적 플러그인
+## Version: 1.4.7
+## Dependencies: HDH_AuraTracking
+
+CooldownTracking.lua
+CooldownOption.xml
