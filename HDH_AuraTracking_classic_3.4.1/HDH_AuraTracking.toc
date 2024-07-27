@@ -1,0 +1,33 @@
+﻿## Interface: 30401
+## Title: HDH_AuraTracking
+## Author: hdh
+## Notes: 설정창 명령어 /at, /auratracking
+## Version: 30401_v1
+## SavedVariables: HDH_AT_PROFILE_DB
+## SavedVariablesPerCharacter: HDH_AT_COMMON_DB, HDH_AT_DB
+
+lib\LibStub\LibStub.lua
+lib\CallbackHandler-1.0\CallbackHandler-1.0.lua
+lib\LibClassicDurations\LibClassicDurations.xml
+# Libs\LibAuraTypes\LibAuraTypes.lua
+# Libs\LibSpellLocks\LibSpellLocks.lua
+
+lib\LibCompress\LibCompress.lua
+lib\AceSerializer-3.0\AceSerializer-3.0.xml
+lib\WeakAuraLib\Transmission.lua
+
+locale\locale_koKR.lua
+
+Tooltip.lua
+
+Tracker\AuraTracking.lua
+#Tracker\CooldownTracking.lua
+#Tracker\PowerTracking.lua
+#Tracker\ComboPointTracking.lua
+#Tracker\DKRuneTracking.lua
+#Tracker\TotemTracking.lua
+#Tracker\StaggerTracking.lua
+#Tracker\HealthTracking.lua
+#Tracker\UsedSkillTracking.lua
+
+Option.xml
